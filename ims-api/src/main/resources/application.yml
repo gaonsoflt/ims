@@ -1,0 +1,115 @@
+spring:
+  profiles:
+    active: dev
+  data:
+    rest:
+      base-path: /api
+      default-page-size: 10
+  jpa:
+    database: MYSQL
+    show-sql: true
+    database-platform: org.hibernate.dialect.MySQL5Dialect
+    properties:
+      hibernate.format_sql: true
+    hibernate:
+      use-new-id-generator-mappings: false
+      ddl-auto: none
+  hateoas:
+    use-hal-as-default-json-media-type: false
+  output:
+    ansi:
+      enabled: detect
+  mvc:
+    view:
+      prefix: /WEB-INF/jsp/
+      suffix: .jsp
+    static-path-pattern: /resources/**
+logging:
+  file: logs/application.log
+  level: # ERROR(=FATAL) < WARN < INFO < DEBUG < TRACE
+    com.gaonsoft.ims.api: trace
+    org.hibernate.type: trace
+security:
+  basic:
+    enabled: true
+  oauth2:
+    authorization:
+      token-key-access: isAuthenticated()
+    resource:
+      jwt:
+        key-value:
+          # openssl x509 -inform der -in trustServer.cer -pubkey -noout
+          -----BEGIN PUBLIC KEY-----
+          MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCP7y1e42PXeoxnScvd1Z4+Ww2d
+          eMBIYiwxNDhUiFhKR6H09ZF6kRBCAW4fJszlCd6zxU/Krud4Ec1WsCQvPlm+xEk8
+          W+0cE8kk2Pr0HOXFnYFtnW9vDSZjFMD9h2+VlFclQ6dvwOu3nGea/izCEmXgJsw6
+          5X6HvjOfHw0siAt2nQIDAQAB
+          -----END PUBLIC KEY-----
+      id: testjwtresourceid
+      filter-order: 3
+    client:
+      id: testjwtclientid
+      authorized-grant-types: 
+        password
+      access-token-validity-seconds: 3600
+      refresh-token-validity-seconds: 3600
+  jwt:
+    token:
+      secret-key: secret
+      expire-length: 3600000
+server:
+  port: 6910
+  servlet:
+    jsp:
+      init-parameters:
+        development: true
+---
+spring:
+  profiles: dev
+  datasource:
+    driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy 
+    url: jdbc:log4jdbc:mysql://192.168.205.213:3306/redmine?useUnicode=true&charaterEncoding=utf-8
+    username: root
+    password: secret
+# 1. jdbc.sqlonly : SQL문 만을 로그로 남기며, PreparedStatement일 경우 관련된 argument 값으로 대체된 SQL문이 보여진다.
+# 2. jdbc.sqltiming : SQL문과 해당 SQL을 실행시키는데 수행된 시간 정보(milliseconds)를 포함한다. 
+# 3. jdbc.audit : ResultSet을 제외한 모든 JDBC 호출 정보를 로그로 남긴다. 많은 양의 로그가 생성되므로 특별히 JDBC 문제를 추적해야 할 필요가 있는 경우를 제외하고는 사용을 권장하지 않는다. 
+# 4. jdbc.resultset : ResultSet을 포함한 모든 JDBC 호출 정보를 로그로 남기므로 매우 방대한 양의 로그가 생성된다. 
+# 5. jdbc.resultsettable : SQL 결과 조회된 데이터의 table을 로그로 남긴다.
+logging:
+  level:
+    com.gaonsoft.ims.api: debug
+    org.hibernate.type: debug
+    jdbc: off
+    jdbc.sqlonly: off
+    jdbc.sqltiming: debug
+    jdbc.audit: off
+    jdbc.resultset: off
+    jdbc.resultsettable: off
+server:
+  port: 6920
+---
+spring:
+  profiles: test
+  datasource:
+    driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy 
+    url: jdbc:log4jdbc:mysql://192.168.205.213:3306/redmine?useUnicode=true&charaterEncoding=utf-8
+    username: root
+    password: secret
+logging:
+  level:
+    com.gaonsoft.ims.api: trace
+    org.hibernate.type: trace
+---
+spring:
+  profiles: prod
+  datasource:
+    driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy 
+    url: jdbc:log4jdbc:mysql://192.168.205.213:3306/redmine?useUnicode=true&charaterEncoding=utf-8
+    username: root
+    password: secret
+logging:
+  config: classpath:logback/logback-spring.xml
+  level:
+    com.gaonsoft.ims.api: info
+    org.hibernate.type: info

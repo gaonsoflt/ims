@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gaonsoft.ims.mapper.IssueMapper">
+	<select id="retrieveIssuesList" resultType="map">
+		SELECT 
+			A.id
+			, A.tracker_id
+			, TRK.name AS tracker_name
+			, A.project_id
+			, PRJ.name AS project_name
+			, A.subject
+			, A.description
+			, A.fixed_version_id
+			, VER.name AS fixed_version_name
+            , A.status_id
+            , STA.name AS status_name
+			, A.author_id
+			, ATH.lastname
+			, ATH.firstname
+			, ATH.login
+            , A.assigned_to_id
+            , ASS.lastname
+            , ASS.firstname
+            , ASS.login
+            , A.priority_id
+            , PRI.name AS priority_name
+            , A.done_ratio
+            , A.start_date
+            , A.due_date
+		FROM issues A
+		INNER JOIN trackers TRK ON TRK.id = A.tracker_id
+		INNER JOIN projects PRJ ON PRJ.id = A.project_id
+		INNER JOIN versions VER ON VER.id = A.fixed_version_id
+		INNER JOIN issue_statuses STA ON STA.id = A.status_id 
+		INNER JOIN enumerations PRI ON PRI.id = A.priority_id AND PRI.type = 'issuePriority' 
+		INNER JOIN users ATH ON ATH.id = A.author_id
+		LEFT JOIN users ASS ON ASS.id = A.assigned_to_id
+		<where>
+			<if test='fixedVersionId != null and FixedVersionId != ""'>AND A.fixed_version_id = #{fixedVersionId}</if>
+			<if test='projectId != null and projectId != ""'>AND A.project_id = #{projectId}</if>
+			<if test='authorId != null and authorId != ""'>AND A.author_id = #{authorId}</if>
+		</where>
+		ORDER BY A.id DESC
+	</select>
+	
+	<select id="retrieveCountIssues" resultType="int">
+		SELECT 
+			COUNT(*)
+		FROM issues
+	</select>
+	
+	<select id="retrieveNextIssueId" resultType="int">
+		SELECT AUTO_INCREMENT
+		FROM information_schema.tables
+		WHERE table_name = 'issues'
+		AND table_schema = DATABASE()
+	</select>
+	
+	<insert id="insertIssue">
+		INSERT INTO issues (
+			tracker_id
+			, project_id
+			, subject
+			, description
+			, status_id
+			, priority_id
+			, fixed_version_id
+			, author_id
+			, lock_version
+			, created_on
+			, updated_on
+			, start_date
+			, root_id
+			, lft
+			, rgt
+			, is_private
+		) VALUES (
+			#{trackerId}
+			, #{projectId}
+			, #{subject}
+			, #{description}
+			, 2
+			, 3
+			, #{fixedVersionId}
+			, #{authorId}
+			, 0
+			, NOW()
+			, NOW()
+			, NOW()
+			, #{rootId}
+			, 1
+			, 2
+			, 0
+		)
+	</insert>
+	
+</mapper>
