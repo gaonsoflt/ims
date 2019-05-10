@@ -63,7 +63,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.PUT, "/api/**").authenticated()
                 .anyRequest().authenticated()
             .and()
-            .apply(new JwtConfigurer(jwtTokenProvider));
+            .apply(new JwtConfigurer(jwtTokenProvider)).and().cors();
         //@formatter:on
     }
 

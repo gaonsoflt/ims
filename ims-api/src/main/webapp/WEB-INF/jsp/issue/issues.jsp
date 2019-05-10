@@ -3,9 +3,9 @@
 <html lang="ko">
 <head>
 <title>Issues</title>
-<script type="text/javascript" src="/resources/js/component/app.js"></script>
-<script type="text/javascript" src="/resources/js/component/manifest.js"></script>
-<script type="text/javascript" src="/resources/js/component/vendor.js"></script>
+<!-- <script type="text/javascript" src="/resources/js/component/app.js"></script> -->
+<!-- <script type="text/javascript" src="/resources/js/component/manifest.js"></script> -->
+<script type="text/javascript" src="/resources/js/component/toastui-vue-grid.js"></script>
 </head>
 <body>
 <div id="app">

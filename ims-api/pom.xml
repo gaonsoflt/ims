@@ -9,14 +9,15 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.gaonsoft.ims</groupId>
-	<artifactId>gaonsoft</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
-	<packaging>war</packaging>
+	<artifactId>ims-api</artifactId>
+	<version>0.1</version>
+	<packaging>jar</packaging>
 	<name>ims-api</name>
 	<description>Issue management system api</description>
 
 	<properties>
 		<java.version>1.8</java.version>
+		<docker.iamge.prefix>gaonsoft</docker.iamge.prefix>
 	</properties>
 
 	<dependencies>
@@ -123,6 +124,15 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+			<!-- docker -->
+			<plugin>
+				<groupId>com.spotify</groupId>
+				<artifactId>dockerfile-maven-plugin</artifactId>
+				<version>1.3.4</version>
+				<configuration>
+					<repository>${docker.iamge.prefix}/ims-api</repository>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>

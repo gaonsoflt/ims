@@ -20,7 +20,7 @@
     <tbody>
       <tr v-for="entry in filteredData">
         <td v-for="key in columns">
-          {{entry[key]}}
+          <span v-html="{{entry[key]}}"></span>
         </td>
       </tr>
     </tbody>
@@ -132,6 +132,9 @@
 						fixedVersionId: this.selectedVersion
 					}
 				}).then((response) => {
+					for(var i = 0; i < response.data.result.length; i++) {
+						response.data.result[i].id = "<a href=\"http://ims.gaonsoft.com/issues/" + response.data.result[i].id + "\">" + response.data.result[i].id + "</a>";
+					}
 					this.gridData = response.data.result;					
 				}).catch((error) => {
 					console.log(error);

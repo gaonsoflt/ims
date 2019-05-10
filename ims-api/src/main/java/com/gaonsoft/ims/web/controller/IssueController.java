@@ -12,4 +12,10 @@ public class IssueController extends WebBaseController {
 		ModelAndView mav = getModelAndView("/issue/issues");
 		return mav;
 	}
+	
+	@RequestMapping("/web/issues2")
+	public ModelAndView issues2() {
+		ModelAndView mav = getModelAndView("/issue/issues2");
+		return mav;
+	}
 }

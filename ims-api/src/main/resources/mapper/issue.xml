@@ -12,21 +12,28 @@
 			, A.description
 			, A.fixed_version_id
 			, VER.name AS fixed_version_name
-            , A.status_id
-            , STA.name AS status_name
+			, A.status_id
+			, STA.name AS status_name
 			, A.author_id
-			, ATH.lastname
-			, ATH.firstname
-			, ATH.login
-            , A.assigned_to_id
-            , ASS.lastname
-            , ASS.firstname
-            , ASS.login
-            , A.priority_id
-            , PRI.name AS priority_name
-            , A.done_ratio
-            , A.start_date
-            , A.due_date
+			, ATH.lastname AS author_lastname
+			, ATH.firstname AS author_firstname
+			, CONCAT(ATH.lastname, ATH.firstname) AS author_fullname
+			, ATH.login AS author_login
+			, A.assigned_to_id
+			, ASS.lastname AS assigned_lastname
+			, ASS.firstname AS assigned_firstname
+			, CONCAT(ASS.lastname, ASS.firstname) AS assigned_fullname 
+			, ASS.login AS assigned_login
+			, A.priority_id
+			, PRI.name AS priority_name
+			, A.done_ratio
+			, A.start_date
+			, A.due_date
+			, DATE_FORMAT(A.start_date, '%Y%m%d') AS start_date_str
+			, DATE_FORMAT(A.due_date, '%Y%m%d') AS due_date_str
+			, BIZ.value AS biz_module
+			, REQ.value AS requester_name
+			, A.created_on
 		FROM issues A
 		INNER JOIN trackers TRK ON TRK.id = A.tracker_id
 		INNER JOIN projects PRJ ON PRJ.id = A.project_id
@@ -35,6 +42,8 @@
 		INNER JOIN enumerations PRI ON PRI.id = A.priority_id AND PRI.type = 'issuePriority' 
 		INNER JOIN users ATH ON ATH.id = A.author_id
 		LEFT JOIN users ASS ON ASS.id = A.assigned_to_id
+		LEFT JOIN custom_values BIZ ON BIZ.customized_id = A.id AND BIZ.custom_field_id = 1
+		LEFT JOIN custom_values REQ ON REQ.customized_id = A.id AND REQ.custom_field_id = 2
 		<where>
 			<if test='fixedVersionId != null and FixedVersionId != ""'>AND A.fixed_version_id = #{fixedVersionId}</if>
 			<if test='projectId != null and projectId != ""'>AND A.project_id = #{projectId}</if>

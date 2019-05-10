@@ -44,6 +44,7 @@ nav ul li:first-child {
 			<ul>
 				<li><a href="/web/main">MAIN</a></li>
 				<li><a href="/web/issues">ISSUE</a></li>
+				<li><a href="/web/issues2">ISSUE2</a></li>
 			</ul>
 		</nav>
 	</div>

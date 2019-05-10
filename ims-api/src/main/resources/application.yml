@@ -100,12 +100,18 @@ logging:
   level:
     com.gaonsoft.ims.api: trace
     org.hibernate.type: trace
+    jdbc: off
+    jdbc.sqlonly: off
+    jdbc.sqltiming: debug
+    jdbc.audit: off
+    jdbc.resultset: off
+    jdbc.resultsettable: off
 ---
 spring:
   profiles: prod
   datasource:
     driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy 
-    url: jdbc:log4jdbc:mysql://192.168.205.213:3306/redmine?useUnicode=true&charaterEncoding=utf-8
+    url: jdbc:log4jdbc:mysql://mysql:3306/redmine?useUnicode=true&charaterEncoding=utf-8
     username: root
     password: secret
 logging:
@@ -113,3 +119,9 @@ logging:
   level:
     com.gaonsoft.ims.api: info
     org.hibernate.type: info
+    jdbc: off
+    jdbc.sqlonly: off
+    jdbc.sqltiming: debug
+    jdbc.audit: off
+    jdbc.resultset: off
+    jdbc.resultsettable: off
